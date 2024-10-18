@@ -1,0 +1,94 @@
+// Kelas Passenger yang merepresentasikan seorang penumpang
+class Passenger {
+    String name; // Nama penumpang
+    Passenger next; // Referensi ke penumpang berikutnya
+
+    // Constructor
+    public Passenger(String name) {
+        this.name = name;
+        this.next = null;
+    }
+}
+
+// Kelas Flight yang merepresentasikan daftar penumpang
+class Flight {
+    private Passenger head; // Referensi ke penumpang pertama
+
+    // Constructor
+    public Flight() {
+        this.head = null;
+    }
+
+    // Metode untuk menambah penumpang di akhir daftar
+    public void addPassenger(String name) {
+        Passenger newPassenger = new Passenger(name);
+        if (head == null) {
+            head = newPassenger; // Jika daftar kosong, penumpang baru menjadi head
+        } else {
+            Passenger current = head;
+            while (current.next != null) {
+                current = current.next; // Mencari akhir dari daftar penumpang
+            }
+            current.next = newPassenger; // Menambahkan penumpang baru di akhir
+        }
+    }
+
+    // Metode untuk menghapus penumpang dari daftar berdasarkan nama
+    public void removePassenger(String name) {
+        if (head == null) {
+            System.out.println("Daftar penumpang kosong.");
+            return;
+        }
+
+        // Jika penumpang yang ingin dihapus adalah head
+        if (head.name.equals(name)) {
+            head = head.next; // Menghapus penumpang pertama
+            return;
+        }
+
+        Passenger current = head;
+        Passenger previous = null;
+
+        while (current != null && !current.name.equals(name)) {
+            previous = current;
+            current = current.next; // Mencari penumpang yang ingin dihapus
+        }
+
+        if (current != null) {
+            previous.next = current.next; // Menghapus penumpang
+        } else {
+            System.out.println("Penumpang dengan nama " + name + " tidak ditemukan.");
+        }
+    }
+
+    // Metode untuk menampilkan semua penumpang dalam daftar
+    public void displayPassengers() {
+        Passenger current = head;
+        if (current == null) {
+            System.out.println("Daftar penumpang kosong.");
+            return;
+        }
+        while (current != null) {
+            System.out.print(current.name + " -> ");
+            current = current.next;
+        }
+        System.out.println("null"); // Menandakan akhir dari daftar penumpang
+    }
+
+    // Main method untuk testing
+    public static void main(String[] args) {
+        Flight flight = new Flight();
+        flight.addPassenger("Alice");
+        flight.addPassenger("Bob");
+        flight.addPassenger("Charlie");
+        
+        System.out.println("Daftar penumpang:");
+        flight.displayPassengers(); // Output: Alice -> Bob -> Charlie -> null
+
+        flight.removePassenger("Bob");
+        System.out.println("Setelah menghapus Bob:");
+        flight.displayPassengers(); // Output: Alice -> Charlie -> null
+
+        flight.removePassenger("David"); // Output: Penumpang dengan nama David tidak ditemukan.
+    }
+}
